@@ -3,12 +3,14 @@ const { zodSchema } = require("./zodSchema");
 const mongoose = require('mongoose');
 const Todo = require("./models/todo");
 const wrapAsync = require("./wrapAsync");
+const cors=require("cors");
 
 
 const app = express();
 const port = 3000;
 
 app.use(express.json());
+app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 
 
@@ -21,7 +23,7 @@ mongoose.connect(url)
 
     });
 
-//------------------------------------------
+//----------------------------------
 
 app.get("/todos", wrapAsync(async (req, res) => {
     const todos = await Todo.find({});
@@ -31,6 +33,7 @@ app.get("/todos", wrapAsync(async (req, res) => {
 
 
 app.post("/todo", wrapAsync(async (req, res) => {
+console.log(req.body);
 
     const isValidSchema = zodSchema.safeParse(req.body);
     if (!isValidSchema.success) {
